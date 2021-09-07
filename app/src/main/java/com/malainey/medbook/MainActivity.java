@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.malainey.medbook.medication.MedicationDoseUnit;
 import com.malainey.medbook.medication.MedicationIntentConstants;
 import com.malainey.medbook.medication.MedicationItem;
@@ -19,7 +18,6 @@ import com.malainey.medbook.medication.MedicationItemContentProvider;
 import com.malainey.medbook.medication.MedicationStore;
 import com.malainey.medbook.views.TripleRowListItemAdapter;
 
-import java.util.Arrays;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
