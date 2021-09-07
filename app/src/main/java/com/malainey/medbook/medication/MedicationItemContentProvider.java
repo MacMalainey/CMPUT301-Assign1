@@ -12,32 +12,32 @@ import com.malainey.medbook.views.TripleRowListItemAdapter;
 import java.util.List;
 
 public class MedicationItemContentProvider implements TripleRowListItemAdapter.ContentProvider, DefaultLifecycleObserver {
-    private final List<MedicationItem> items;
+    private final MedicationStore store;
     private Context context;
 
-    public MedicationItemContentProvider(@NonNull List<MedicationItem> items, @NonNull Context context) {
+    public MedicationItemContentProvider(@NonNull MedicationStore store, @NonNull Context context) {
         this.context = context;
-        this.items = items;
+        this.store = store;
     }
 
     @Override
     public String getTitle(int pos) {
-        return items.get(pos).name;
+        return store.get(pos).name;
     }
 
     @Override
     public String getSecondRow(int pos) {
-        return context.getString(R.string.daily_dosage_tag, items.get(pos).dailyFreq, items.get(pos).dosage, context.getString(items.get(pos).unit.id));
+        return context.getString(R.string.daily_dosage_tag, store.get(pos).dailyFreq, store.get(pos).dosage, context.getString(store.get(pos).unit.id));
     }
 
     @Override
     public String getThirdRow(int pos) {
-        return context.getString(R.string.date_started_tag, items.get(pos).dateStarted);
+        return context.getString(R.string.date_started_tag, store.get(pos).dateStarted);
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return store.getItemCount();
     }
 
     @Override

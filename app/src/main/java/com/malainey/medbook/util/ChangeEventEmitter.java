@@ -20,7 +20,7 @@ public abstract class ChangeEventEmitter<R, S> {
         listeners.forEach(listener -> listener.onChange(event, changedItem));
     }
 
-    interface ChangeListener<T, U> {
+    public interface ChangeListener<T, U> {
         void onChange(T event, U changedItem);
     }
 }

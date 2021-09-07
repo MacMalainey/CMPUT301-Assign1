@@ -20,6 +20,14 @@ public class MedicationEditActivity extends AppCompatActivity {
 
     private int position;
 
+    public void onSubmit(View view) {
+        Intent intent = new Intent();
+        intent.putExtra(MedicationIntentConstants.EDIT_MEDICATION_POSITION, position);
+        intent.putExtra(MedicationIntentConstants.EDIT_MEDICATION_ITEM, new MedicationItem("a new med", new Date(), 30, MedicationDoseUnit.MG, 1));
+        setResult(Activity.RESULT_OK, intent);
+        finish();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,15 +45,7 @@ public class MedicationEditActivity extends AppCompatActivity {
         }
     }
 
-    private void onSubmit(View view) {
-        Intent intent = new Intent();
-        intent.putExtra(MedicationIntentConstants.EDIT_MEDICATION_POSITION, position);
-        intent.putExtra(MedicationIntentConstants.EDIT_MEDICATION_ITEM, new MedicationItem("a new med", new Date(), 30, MedicationDoseUnit.MG, 1));
-        setResult(Activity.RESULT_OK, intent);
-        finish();
-    }
-
     private void verifyData() {
-        // TODO:
+        // TODO: 
     }
 }

@@ -20,7 +20,6 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/name_of_medication"
-            android:hintTextColor="#78909C"
             android:importantForAutofill="no"
             android:inputType="text"
             tools:ignore="TextContrastCheck" />

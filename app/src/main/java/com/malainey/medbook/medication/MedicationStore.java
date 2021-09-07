@@ -9,15 +9,20 @@ public class MedicationStore extends ChangeEventEmitter<MedicationStore.Medicati
 
     // Easy way to keep all the medications loaded even if the main activity (for some WILD reason gets destroyed)
     private static final List<MedicationItem> medications = new ArrayList<>();
+    private static final MedicationStore store = new MedicationStore();
 
     public static MedicationStore getInstance() {
-        return new MedicationStore();
+        return store;
     }
 
     private MedicationStore() {} // Empty Constructor
 
     public MedicationItem get(int index) {
         return medications.get(index);
+    }
+
+    public int getItemCount() {
+        return medications.size();
     }
 
     public void replace(int index, MedicationItem item) {
@@ -28,10 +33,6 @@ public class MedicationStore extends ChangeEventEmitter<MedicationStore.Medicati
     public void add(MedicationItem item) {
         medications.add(item);
         fireEvent(MedicationStoreEvent.ITEM_INSERTED, medications.size() - 1);
-    }
-
-    public static List<MedicationItem> getMedications() {
-        return medications;
     }
 
     public enum MedicationStoreEvent {
