@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">mmalaine-MedBook</string>
+    <string name="date_started_tag">Date Started: %1$tF</string>
+    <string name="daily_dosage_tag">Daily Amount: %1$d doses of %2$d%3$s</string>
+    <string name="dose_unit_mg">mg</string>
+    <string name="dose_unit_drop">drops</string>
+    <string name="dose_unit_mcg">mcg</string>
+    <string name="name_of_medication">Name of Medication</string>
+    <string name="medication_edit_submit">Submit</string>
+</resources>
