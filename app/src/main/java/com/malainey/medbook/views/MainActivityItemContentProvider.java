@@ -1,4 +1,4 @@
-package com.malainey.medbook.medication;
+package com.malainey.medbook.views;
 
 import android.content.Context;
 
@@ -7,15 +7,27 @@ import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.malainey.medbook.R;
-import com.malainey.medbook.views.TripleRowListItemAdapter;
+import com.malainey.medbook.medication.MedicationStore;
 
-import java.util.List;
-
-public class MedicationItemContentProvider implements TripleRowListItemAdapter.ContentProvider, DefaultLifecycleObserver {
+public class MainActivityItemContentProvider implements TripleRowListItemAdapter.ContentProvider, DefaultLifecycleObserver {
+    /**
+     * Store to get information from
+     */
     private final MedicationStore store;
+
+    /**
+     * Context to get string resources from
+     */
     private Context context;
 
-    public MedicationItemContentProvider(@NonNull MedicationStore store, @NonNull Context context) {
+    /**
+     * Constructor for content provider
+     * @param store supplier for item entries
+     * @param context supplier for string resources
+     *
+     * <b>REGISTER THIS WITH THE USER'S LIFECYCLE TO AVOID MEMORY</b>
+     */
+    public MainActivityItemContentProvider(@NonNull MedicationStore store, @NonNull Context context) {
         this.context = context;
         this.store = store;
     }

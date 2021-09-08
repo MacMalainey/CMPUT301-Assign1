@@ -7,4 +7,10 @@
     <string name="dose_unit_mcg">mcg</string>
     <string name="name_of_medication">Name of Medication</string>
     <string name="medication_edit_submit">Submit</string>
+    <string name="date_started">Date Started:</string>
+    <string name="units">Units:</string>
+    <string name="dosage">Dosage:</string>
+    <string name="frequency">Frequency:</string>
+    <string name="daily_intake">Daily Intake:</string>
+    <string name="name">Name:</string>
 </resources>
