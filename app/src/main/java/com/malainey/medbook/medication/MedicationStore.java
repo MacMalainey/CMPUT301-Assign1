@@ -1,5 +1,7 @@
 package com.malainey.medbook.medication;
 
+import androidx.annotation.NonNull;
+
 import com.malainey.medbook.util.ChangeEventEmitter;
 
 import java.util.ArrayList;
@@ -12,13 +14,19 @@ import java.util.List;
 public class MedicationStore extends ChangeEventEmitter<MedicationStore.MedicationStoreEvent, Integer> {
 
     /**
-     * List for registered medications
-     */
-    private static final List<MedicationItem> medications = new ArrayList<>();
-    /**
      * Internal reference that is shared with whomever wants it
      */
     private static final MedicationStore store = new MedicationStore();
+
+    /**
+     * List for registered medications
+     */
+    private final List<MedicationItem> medications = new ArrayList<>();
+
+    /**
+     * Total amount of doses for all the registered medication
+     */
+    private int totalDoseCount = 0;
 
     /**
      * Get the instance of the store
@@ -51,12 +59,20 @@ public class MedicationStore extends ChangeEventEmitter<MedicationStore.Medicati
     }
 
     /**
+     * Get total dose count
+     */
+    public int getDoseCount() {
+        return totalDoseCount;
+    }
+
+    /**
      * Replaces the registered item at an index for a different item
      * @param index position of item to replace
      * @param item medication to register
      */
-    public void replace(int index, MedicationItem item) {
-        medications.set(index, item);
+    public void replace(int index, @NonNull MedicationItem item) {
+        MedicationItem replacedItem = medications.set(index, item);
+        totalDoseCount += item.dailyFreq - replacedItem.dailyFreq;
         fireEvent(MedicationStoreEvent.ITEM_CHANGED, index);
     }
 
@@ -64,9 +80,20 @@ public class MedicationStore extends ChangeEventEmitter<MedicationStore.Medicati
      * Register a new medication
      * @param item medication to register
      */
-    public void add(MedicationItem item) {
+    public void add(@NonNull MedicationItem item) {
         medications.add(item);
+        totalDoseCount += item.dailyFreq;
         fireEvent(MedicationStoreEvent.ITEM_INSERTED, medications.size() - 1);
+    }
+
+    /**
+     * Remove a registered medication
+     * @param index position of item to remove
+     */
+    public void remove(int index) {
+        MedicationItem removedItem = medications.remove(index);
+        totalDoseCount -= removedItem.dailyFreq;
+        fireEvent(MedicationStoreEvent.ITEM_REMOVED, index);
     }
 
     /**
@@ -80,6 +107,10 @@ public class MedicationStore extends ChangeEventEmitter<MedicationStore.Medicati
         /**
          * Event fired when an item has been changed
          */
-        ITEM_CHANGED
+        ITEM_CHANGED,
+        /**
+         * Event fired when an item has been removed
+         */
+        ITEM_REMOVED
     }
 }

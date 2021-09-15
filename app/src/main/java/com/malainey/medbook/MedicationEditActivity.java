@@ -8,12 +8,14 @@ import android.widget.CalendarView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.malainey.medbook.medication.MedicationDoseUnit;
 import com.malainey.medbook.medication.MedicationIntentConstants;
 import com.malainey.medbook.medication.MedicationItem;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class MedicationEditActivity extends AppCompatActivity {
@@ -51,7 +53,7 @@ public class MedicationEditActivity extends AppCompatActivity {
      */
     public void onSubmit(View view) {
         // Get the input from each view
-        final String name = editMedicationNameView.getText().toString();
+        final String name = editMedicationNameView.getText().toString().trim();
         final String frequencyInput = editDoseFrequencyView.getText().toString();
         final String dosageInput = editDoseAmountView.getText().toString();
         final Date dateStarted = new Date(editDateStartedView.getDate());
@@ -61,8 +63,11 @@ public class MedicationEditActivity extends AppCompatActivity {
 
         // Verify the data is correct
         boolean hasErrors = false;
-        if (name.trim().length() <= 0) {
+        if (name.length() <= 0) {
             editMedicationNameView.setError("Required");
+            hasErrors = true;
+        } else if (name.length() > MedicationItem.MAX_NAME_LENGTH) {
+            editMedicationNameView.setError("Must be under 40 characters");
             hasErrors = true;
         }
         // Input is forced to be positive, so we just have to check if it is empty
@@ -123,6 +128,12 @@ public class MedicationEditActivity extends AppCompatActivity {
         editDoseFrequencyView = ((TextView) findViewById(R.id.editDoseFreq));
         editDateStartedView = ((CalendarView) findViewById(R.id.editDateStarted));
         editUnitTypeView = ((RadioGroup) findViewById(R.id.editUnitTypeRadioGroup));
+
+        editDateStartedView.setOnDateChangeListener((calendarView, year, month, day) -> {
+            Calendar c = Calendar.getInstance();
+            c.set(year, month, day);
+            editDateStartedView.setDate(c.getTimeInMillis());
+        });
 
         // Populate any initial data we have
         if (medicationItem != null) {

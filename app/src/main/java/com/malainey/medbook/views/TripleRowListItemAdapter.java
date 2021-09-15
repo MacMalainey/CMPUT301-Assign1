@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -12,17 +13,33 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.malainey.medbook.R;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 public class TripleRowListItemAdapter extends RecyclerView.Adapter<TripleRowListItemAdapter.ViewHolder> {
 
     private final ContentProvider provider;
-    private final Consumer<Integer> onItemAction;
+    private final List<ItemModel> itemModelList = new ArrayList<>();
+    public boolean renderCheckboxes = false;
 
     // Pass in the contact array into the constructor
-    public TripleRowListItemAdapter(@NonNull ContentProvider provider, Consumer<Integer> onItemAction) {
+    public TripleRowListItemAdapter(@NonNull ContentProvider provider) {
         this.provider = provider;
-        this.onItemAction = onItemAction;
+    }
+
+    public void showCheckboxes(boolean state) {
+        renderCheckboxes = state;
+    }
+
+    public int[] getSelectedItems() {
+        return IntStream.range(0, itemModelList.size()).filter(i -> itemModelList.get(i).isChecked).toArray();
+    }
+
+    public void removeAt(int pos) {
+        itemModelList.remove(pos);
+        notifyItemRemoved(pos);
     }
 
     @NonNull
@@ -35,8 +52,7 @@ public class TripleRowListItemAdapter extends RecyclerView.Adapter<TripleRowList
         View medicationItemView = inflater.inflate(R.layout.view_triple_row_list_item, parent, false);
 
         // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(medicationItemView);
-        return viewHolder;
+        return new ViewHolder(medicationItemView);
     }
 
     @Override
@@ -45,7 +61,28 @@ public class TripleRowListItemAdapter extends RecyclerView.Adapter<TripleRowList
         holder.nameTextView.setText(provider.getTitle(position));
         holder.dosageTextView.setText(provider.getSecondRow(position));
         holder.dateStartedTextView.setText(provider.getThirdRow(position));
-        holder.actionButton.setOnClickListener(view -> onItemAction.accept(position));
+
+        ItemModel model = new ItemModel();
+        itemModelList.add(position, model);
+
+        final Consumer<Integer> action = provider.getAction(position);
+        holder.actionButton.setOnClickListener(null);
+        if (action != null) {
+            holder.actionButton.setVisibility(View.VISIBLE);
+            holder.actionButton.setOnClickListener(view -> action.accept(itemModelList.indexOf(model)));
+        } else
+            holder.actionButton.setVisibility(View.GONE);
+
+        holder.checkBox.setOnCheckedChangeListener(null);
+        holder.checkBox.setChecked(false);
+        if (renderCheckboxes && provider.isSelectable(position)) {
+            holder.checkBox.setVisibility(View.VISIBLE);
+            holder.checkBox.setOnCheckedChangeListener((view, enabled) -> {
+                model.isChecked = enabled;
+            });
+        }
+        else
+            holder.checkBox.setVisibility(View.GONE);
     }
 
     @Override
@@ -61,6 +98,7 @@ public class TripleRowListItemAdapter extends RecyclerView.Adapter<TripleRowList
         public final TextView dosageTextView;
         public final TextView dateStartedTextView;
         public final ImageButton actionButton;
+        public final CheckBox checkBox;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -72,9 +110,13 @@ public class TripleRowListItemAdapter extends RecyclerView.Adapter<TripleRowList
             dosageTextView = (TextView) itemView.findViewById(R.id.tripleListItemSecondRow);
             dateStartedTextView = (TextView) itemView.findViewById(R.id.tripleListItemThirdRow);
             actionButton = (ImageButton) itemView.findViewById(R.id.actionButton);
-
+            checkBox = (CheckBox) itemView.findViewById(R.id.itemCheckBox);
         }
 
+    }
+
+    private static class ItemModel {
+        boolean isChecked;
     }
 
     public interface ContentProvider {
@@ -82,5 +124,7 @@ public class TripleRowListItemAdapter extends RecyclerView.Adapter<TripleRowList
         String getSecondRow(int pos);
         String getThirdRow(int pos);
         int getItemCount();
+        boolean isSelectable(int pos);
+        Consumer<Integer> getAction(int pos);
     }
 }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -18,6 +19,8 @@ import com.malainey.medbook.views.MainActivityItemContentProvider;
 import com.malainey.medbook.medication.MedicationStore;
 import com.malainey.medbook.views.TripleRowListItemAdapter;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 
 /**
@@ -69,19 +72,20 @@ public class MainActivity extends AppCompatActivity {
 
         // Create the content provider and attach it to this activity's lifecycle
         MainActivityItemContentProvider contentProvider =
-                new MainActivityItemContentProvider(
-                        store,
-                        this
-                );
-        getLifecycle().addObserver(contentProvider);
-
-        // Create adapter and give it to the RecyclerView
-        adapter = new TripleRowListItemAdapter(contentProvider, (Integer position) -> {
+                new MainActivityItemContentProvider();
+        contentProvider.setAction((Integer position) -> {
             Intent intent = new Intent(this, MedicationEditActivity.class);
             intent.putExtra(MedicationIntentConstants.EDIT_MEDICATION_ITEM, store.get(position));
             intent.putExtra(MedicationIntentConstants.EDIT_MEDICATION_POSITION, position);
             mStartForResult.launch(intent);
         });
+        contentProvider.setStore(this.store);
+        contentProvider.setResources(getResources());
+        getLifecycle().addObserver(contentProvider);
+
+        // Create adapter and give it to the RecyclerView
+        adapter = new TripleRowListItemAdapter(contentProvider);
+        adapter.showCheckboxes(true);
         medicationListView.setAdapter(adapter);
         medicationListView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -93,9 +97,22 @@ public class MainActivity extends AppCompatActivity {
      * @param view view that calls the callback, unused
      */
     public void onAddNewMedButtonClick(View view) {
-        Intent intent = new Intent(this, MedicationEditActivity.class);
-        intent.putExtra(MedicationIntentConstants.EDIT_MEDICATION_POSITION, -1);
-        mStartForResult.launch(intent);
+//        Intent intent = new Intent(this, MedicationEditActivity.class);
+//        intent.putExtra(MedicationIntentConstants.EDIT_MEDICATION_POSITION, -1);
+//        mStartForResult.launch(intent);
+        store.add(new MedicationItem("1", new Date(), 1, MedicationDoseUnit.DROP, 1));
+    }
+
+    public void onDeleteMedClick(View view) {
+        int[] items = adapter.getSelectedItems();
+        if (items.length > 0) {
+            for (int i = items.length - 1; i >= 0; i--) {
+                store.remove(items[i]);
+            }
+        } else {
+            Toast.makeText(this, "Select items first", // TODO add to resource
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -106,8 +123,13 @@ public class MainActivity extends AppCompatActivity {
     public void onMedicationStoreChangeListener(MedicationStore.MedicationStoreEvent event, int position) {
         if (event.equals(MedicationStore.MedicationStoreEvent.ITEM_CHANGED)) {
             adapter.notifyItemChanged(position);
+            adapter.notifyItemChanged(this.store.getItemCount());
         } else if (event.equals(MedicationStore.MedicationStoreEvent.ITEM_INSERTED)) {
             adapter.notifyItemInserted(position);
+            adapter.notifyItemChanged(this.store.getItemCount());
+        } else if (event.equals(MedicationStore.MedicationStoreEvent.ITEM_REMOVED)) {
+            adapter.removeAt(position);
+            adapter.notifyItemChanged(this.store.getItemCount());
         }
     }
 
