@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.malainey.medbook.medication.MedicationIntentConstants;
 import com.malainey.medbook.medication.MedicationItem;
-import com.malainey.medbook.views.MainActivityItemContentProvider;
 import com.malainey.medbook.medication.MedicationStore;
+import com.malainey.medbook.views.MainActivityItemContentProvider;
 import com.malainey.medbook.views.TripleRowListItemAdapter;
 
 
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Lookup the recyclerview in activity layout
-        RecyclerView medicationListView = (RecyclerView) findViewById(R.id.medicationListItemsView);
+        RecyclerView medicationListView = findViewById(R.id.medicationListItemsView);
 
         // Create the content provider and attach it to this activity's lifecycle
         MainActivityItemContentProvider contentProvider =
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 store.remove(items[i]);
             }
         } else {
-            Toast.makeText(this, getString(R.string.select_items_first), // TODO add to resource
+            Toast.makeText(this, getString(R.string.select_items_first),
                     Toast.LENGTH_SHORT).show();
         }
     }

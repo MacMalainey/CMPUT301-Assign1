@@ -109,9 +109,7 @@ public class TripleRowListItemAdapter extends RecyclerView.Adapter<TripleRowList
         holder.checkBox.setChecked(false);
         if (renderCheckboxes && provider.isSelectable(position)) {
             holder.checkBox.setVisibility(View.VISIBLE);
-            holder.checkBox.setOnCheckedChangeListener((view, enabled) -> {
-                model.isChecked = enabled;
-            });
+            holder.checkBox.setOnCheckedChangeListener((view, enabled) -> model.isChecked = enabled);
         }
         else
             holder.checkBox.setVisibility(View.GONE);

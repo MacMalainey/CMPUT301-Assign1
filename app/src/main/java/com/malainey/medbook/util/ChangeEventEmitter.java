@@ -8,7 +8,7 @@ public abstract class ChangeEventEmitter<R, S> {
     /**
      * Internal list to keep track of listeners
      */
-    private List<ChangeListener<R, S>> listeners = new ArrayList<>();
+    private final List<ChangeListener<R, S>> listeners = new ArrayList<>();
 
     /**
      * Add a listener
