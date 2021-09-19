@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 
 public class MainActivityItemContentProvider implements TripleRowListItemAdapter.ContentProvider, DefaultLifecycleObserver {
     /**
-     * Store to get information from
+     * Store to get data from
      */
     private MedicationStore store;
 
@@ -28,21 +28,25 @@ public class MainActivityItemContentProvider implements TripleRowListItemAdapter
     private Consumer<Integer> onAction;
 
     /**
-     *
-     * @param callback
+     * Set callback to run when an item is pressed
+     * @param callback to run when a context object is hit
      */
     public void setAction(@NonNull Consumer<Integer> callback) {
         onAction = callback;
     }
 
     /**
-     *
-     * @param res
+     * Set resource context to use for getting string resources
+     * @param res resource context to grab strings from
      */
     public void setResources(@NonNull Resources res) {
         this.resources = res;
     }
 
+    /**
+     * Set store to use for getting medication data
+     * @param store to retrieve data from
+     */
     public void setStore(@NonNull MedicationStore store) {
         this.store = store;
     }
@@ -52,13 +56,13 @@ public class MainActivityItemContentProvider implements TripleRowListItemAdapter
         if (pos < store.getItemCount())
             return store.get(pos).name;
         else
-            return "Total doses:" + store.getDoseCount(); //TODO
+            return resources.getString(R.string.total_dosage_label, store.getDoseCount());
     }
 
     @Override
     public String getSecondRow(int pos) {
         if (pos < store.getItemCount())
-            return resources.getString(R.string.daily_dosage_tag, store.get(pos).dailyFreq, store.get(pos).dosage, resources.getString(store.get(pos).unit.id));
+            return resources.getString(R.string.daily_dosage_tag, store.get(pos).dailyFreq, resources.getString(store.get(pos).unit.RSuffixId, store.get(pos).dosage));
         else
             return null;
     }
@@ -84,6 +88,11 @@ public class MainActivityItemContentProvider implements TripleRowListItemAdapter
     @Override
     public Consumer<Integer> getAction(int pos) {
         return pos < store.getItemCount() ? activePosition -> onAction.accept(activePosition) : null;
+    }
+
+    @Override
+    public int getActionDrawableId(int pos) {
+        return android.R.drawable.ic_menu_edit;
     }
 
     @Override

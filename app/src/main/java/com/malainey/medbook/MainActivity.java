@@ -12,16 +12,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.malainey.medbook.medication.MedicationDoseUnit;
 import com.malainey.medbook.medication.MedicationIntentConstants;
 import com.malainey.medbook.medication.MedicationItem;
 import com.malainey.medbook.views.MainActivityItemContentProvider;
 import com.malainey.medbook.medication.MedicationStore;
 import com.malainey.medbook.views.TripleRowListItemAdapter;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
 
 /**
  * Main launcher activity, displays a list of medications
@@ -94,15 +90,22 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Callback for the add new item button
-     * @param view view that calls the callback, unused
+     *
+     * Launches the medication edit activity with no additional data
+     * @param view view that calls the callback (unused)
      */
     public void onAddNewMedButtonClick(View view) {
-//        Intent intent = new Intent(this, MedicationEditActivity.class);
-//        intent.putExtra(MedicationIntentConstants.EDIT_MEDICATION_POSITION, -1);
-//        mStartForResult.launch(intent);
-        store.add(new MedicationItem("1", new Date(), 1, MedicationDoseUnit.DROP, 1));
+        Intent intent = new Intent(this, MedicationEditActivity.class);
+        intent.putExtra(MedicationIntentConstants.EDIT_MEDICATION_POSITION, -1);
+        mStartForResult.launch(intent);
     }
 
+    /**
+     * Callback for the remove medications button
+     *
+     * Removes selected items from store
+     * @param view view that calls the callback (unused)
+     */
     public void onDeleteMedClick(View view) {
         int[] items = adapter.getSelectedItems();
         if (items.length > 0) {
@@ -110,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 store.remove(items[i]);
             }
         } else {
-            Toast.makeText(this, "Select items first", // TODO add to resource
+            Toast.makeText(this, getString(R.string.select_items_first), // TODO add to resource
                     Toast.LENGTH_SHORT).show();
         }
     }

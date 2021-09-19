@@ -1,5 +1,6 @@
 package com.malainey.medbook.views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,23 +21,53 @@ import java.util.stream.IntStream;
 
 public class TripleRowListItemAdapter extends RecyclerView.Adapter<TripleRowListItemAdapter.ViewHolder> {
 
+    /**
+     * Content provider to get formatted data from
+     */
     private final ContentProvider provider;
-    private final List<ItemModel> itemModelList = new ArrayList<>();
-    public boolean renderCheckboxes = false;
 
-    // Pass in the contact array into the constructor
+    /**
+     * Item model to keep track of selected items
+     */
+    private final List<ItemModel> itemModelList = new ArrayList<>();
+
+    /**
+     * Whether or not to render checkboxes
+     */
+    private boolean renderCheckboxes = false;
+
+    /**
+     * Constructor for TripleRowListItemAdapter
+     * @param provider for formatted data to display
+     */
     public TripleRowListItemAdapter(@NonNull ContentProvider provider) {
         this.provider = provider;
     }
 
+    /**
+     * Set whether or not checkboxes should be shown
+     * @param state if true checkboxes will be shown
+     */
+    @SuppressLint("NotifyDataSetChanged")
     public void showCheckboxes(boolean state) {
         renderCheckboxes = state;
+        notifyDataSetChanged();
     }
 
+    /**
+     * Get the position of all selected items
+     * @return array of positions for selected items
+     */
     public int[] getSelectedItems() {
         return IntStream.range(0, itemModelList.size()).filter(i -> itemModelList.get(i).isChecked).toArray();
     }
 
+    /**
+     * Notify that an item has been removed at the given position
+     *
+     * WARNING - use this instead of {notifyItemRemoved} otherwise selected items lists won't be properly updated.
+     * @param pos position of item removed
+     */
     public void removeAt(int pos) {
         itemModelList.remove(pos);
         notifyItemRemoved(pos);
@@ -69,6 +100,7 @@ public class TripleRowListItemAdapter extends RecyclerView.Adapter<TripleRowList
         holder.actionButton.setOnClickListener(null);
         if (action != null) {
             holder.actionButton.setVisibility(View.VISIBLE);
+            holder.actionButton.setImageResource(provider.getActionDrawableId(position));
             holder.actionButton.setOnClickListener(view -> action.accept(itemModelList.indexOf(model)));
         } else
             holder.actionButton.setVisibility(View.GONE);
@@ -106,11 +138,11 @@ public class TripleRowListItemAdapter extends RecyclerView.Adapter<TripleRowList
             // Stores the itemView in a public final member variable that can be used
             // to access the context from any ViewHolder instance.
             super(itemView);
-            nameTextView = (TextView) itemView.findViewById(R.id.tripleListItemTitle);
-            dosageTextView = (TextView) itemView.findViewById(R.id.tripleListItemSecondRow);
-            dateStartedTextView = (TextView) itemView.findViewById(R.id.tripleListItemThirdRow);
-            actionButton = (ImageButton) itemView.findViewById(R.id.actionButton);
-            checkBox = (CheckBox) itemView.findViewById(R.id.itemCheckBox);
+            nameTextView = itemView.findViewById(R.id.tripleListItemTitle);
+            dosageTextView = itemView.findViewById(R.id.tripleListItemSecondRow);
+            dateStartedTextView = itemView.findViewById(R.id.tripleListItemThirdRow);
+            actionButton = itemView.findViewById(R.id.actionButton);
+            checkBox = itemView.findViewById(R.id.itemCheckBox);
         }
 
     }
@@ -120,11 +152,54 @@ public class TripleRowListItemAdapter extends RecyclerView.Adapter<TripleRowList
     }
 
     public interface ContentProvider {
+        /**
+         * Get the main title for a given item
+         * @param pos position of item
+         * @return title to display
+         */
         String getTitle(int pos);
+
+        /**
+         * Get the second row data for a given item
+         * @param pos position of item
+         * @return second row to display
+         */
         String getSecondRow(int pos);
+
+        /**
+         * Get the third row data for a given item
+         * @param pos position of item
+         * @return third row to display
+         */
         String getThirdRow(int pos);
+
+        /**
+         * Get the number of items to display
+         */
         int getItemCount();
+
+        /**
+         * Set if the item should be selectable
+         * @param pos position of item
+         * @return boolean to set if the item should be selectable
+         */
         boolean isSelectable(int pos);
+
+        /**
+         * Action to run if the item's button is selected
+         *
+         * If null is returned no action button is displayed
+         * @param pos position of item
+         * @return callback to run on action button clicked
+         *      (callback is provided the will be current position of item)
+         */
         Consumer<Integer> getAction(int pos);
+
+        /**
+         * Get the id of the drawable to display for the action button
+         * @param pos position of item
+         * @return id of drawable
+         */
+        int getActionDrawableId(int pos);
     }
 }

@@ -8,7 +8,6 @@ import android.widget.CalendarView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.malainey.medbook.medication.MedicationDoseUnit;
@@ -123,11 +122,11 @@ public class MedicationEditActivity extends AppCompatActivity {
         position = intent.getIntExtra(MedicationIntentConstants.EDIT_MEDICATION_POSITION, -1);
 
         // Get the views so we don't have to keep finding them
-        editMedicationNameView = ((TextView) findViewById(R.id.editMedicationName));
-        editDoseAmountView = ((TextView) findViewById(R.id.editDoseAmount));
-        editDoseFrequencyView = ((TextView) findViewById(R.id.editDoseFreq));
-        editDateStartedView = ((CalendarView) findViewById(R.id.editDateStarted));
-        editUnitTypeView = ((RadioGroup) findViewById(R.id.editUnitTypeRadioGroup));
+        editMedicationNameView = findViewById(R.id.editMedicationName);
+        editDoseAmountView = findViewById(R.id.editDoseAmount);
+        editDoseFrequencyView = findViewById(R.id.editDoseFreq);
+        editDateStartedView = findViewById(R.id.editDateStarted);
+        editUnitTypeView = findViewById(R.id.editUnitTypeRadioGroup);
 
         editDateStartedView.setOnDateChangeListener((calendarView, year, month, day) -> {
             Calendar c = Calendar.getInstance();

@@ -1,10 +1,13 @@
 <resources>
     <string name="app_name">mmalaine-MedBook</string>
     <string name="date_started_tag">Date Started: %1$tF</string>
-    <string name="daily_dosage_tag">Daily Amount: %1$d doses of %2$d%3$s</string>
-    <string name="dose_unit_mg">mg</string>
-    <string name="dose_unit_drop">drops</string>
-    <string name="dose_unit_mcg">mcg</string>
+    <string name="daily_dosage_tag">Daily Amount: %1$d doses of %2$s</string>
+    <string name="dose_label_unit_mg">mg</string>
+    <string name="dose_label_unit_drop">drops</string>
+    <string name="dose_label_unit_mcg">mcg</string>
+    <string name="dose_unit_mg">%1$dmg</string>
+    <string name="dose_unit_drop">%1$d drop(s)</string>
+    <string name="dose_unit_mcg">%1$dmcg</string>
     <string name="name_of_medication">Name of Medication</string>
     <string name="medication_edit_submit">Submit</string>
     <string name="date_started">Date Started:</string>
@@ -13,4 +16,6 @@
     <string name="frequency">Frequency:</string>
     <string name="daily_intake">Daily Intake:</string>
     <string name="name">Name:</string>
+    <string name="total_dosage_label">Total doses: %1$d</string>
+    <string name="select_items_first">No items selected to delete</string>
 </resources>

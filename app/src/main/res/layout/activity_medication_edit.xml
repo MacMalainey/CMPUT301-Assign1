@@ -142,21 +142,21 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:checked="true"
-            android:text="@string/dose_unit_mg" />
+            android:text="@string/dose_label_unit_mg" />
 
         <RadioButton
             android:id="@+id/radioButtonUnitMcg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/dose_unit_mcg" />
+            android:text="@string/dose_label_unit_mcg" />
 
         <RadioButton
             android:id="@+id/radioButtonUnitDrops"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/dose_unit_drop" />
+            android:text="@string/dose_label_unit_drop" />
 
     </RadioGroup>
 
