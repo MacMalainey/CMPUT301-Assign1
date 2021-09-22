@@ -157,8 +157,8 @@ public class MedicationEditActivity extends AppCompatActivity {
                 return R.id.radioButtonUnitMcg;
             case DROP:
                 return R.id.radioButtonUnitDrops;
-            default: // This should never get hit, but we do this so the compiler is happy
-                return -1;
+            default:
+                throw new IllegalArgumentException("No handler for MedicationDoseUnit type: " + unit.toString());
         }
     }
 }
