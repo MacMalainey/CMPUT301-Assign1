@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Callback for handling medication edit result activity
      */
-    private final ActivityResultLauncher<Intent> mStartForResult;
+    private final ActivityResultLauncher<Intent> editActivityResultLauncher;
     /**
      * Medication registry store
      */
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public MainActivity() {
         this.store = MedicationStore.getInstance();
-        this.mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+        this.editActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 Intent intent = result.getData();
                 if (result.getResultCode() == Activity.RESULT_OK && intent != null) {
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, MedicationEditActivity.class);
             intent.putExtra(MedicationIntentConstants.EDIT_MEDICATION_ITEM, store.get(position));
             intent.putExtra(MedicationIntentConstants.EDIT_MEDICATION_POSITION, position);
-            mStartForResult.launch(intent);
+            editActivityResultLauncher.launch(intent);
         });
         contentProvider.setStore(this.store);
         contentProvider.setResources(getResources());
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
     public void onAddNewMedButtonClick(View view) {
         Intent intent = new Intent(this, MedicationEditActivity.class);
         intent.putExtra(MedicationIntentConstants.EDIT_MEDICATION_POSITION, -1);
-        mStartForResult.launch(intent);
+        editActivityResultLauncher.launch(intent);
     }
 
     /**
