@@ -11,9 +11,12 @@ public enum MedicationDoseUnit {
     DROP(R.string.dose_unit_drop, R.string.dose_label_unit_drop);
 
     /**
-     * Id for human readable string resource for unit type
+     * Id for human readable string resource for unit suffix
      */
     public final int RSuffixId;
+    /**
+     * Id for human readable string resource for unit label
+     */
     public final int RLabelId;
 
     /**
