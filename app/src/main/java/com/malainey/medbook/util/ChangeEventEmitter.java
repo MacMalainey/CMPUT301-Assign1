@@ -3,6 +3,11 @@ package com.malainey.medbook.util;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class that allows the emitting and listening of class defined events
+ * @param <R> Event type
+ * @param <S> Data type
+ */
 public abstract class ChangeEventEmitter<R, S> {
 
     /**

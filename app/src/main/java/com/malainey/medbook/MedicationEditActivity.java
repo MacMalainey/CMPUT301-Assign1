@@ -17,6 +17,9 @@ import com.malainey.medbook.medication.MedicationItem;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Activity for editing details of a pre-existing or non-existent MedicationItem
+ */
 public class MedicationEditActivity extends AppCompatActivity {
 
     /**
